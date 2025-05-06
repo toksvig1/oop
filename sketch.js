@@ -92,17 +92,20 @@ class createAnt{
 					this.returnord = this.fermone.length-1
 					console.log(this.fermone.length)
 				}
-				for(let i = 0; i<this.fermone.length;i=i+10){
-					circle(this.fermone[i].x,this.fermone[i].y,10)
-				}
+				//for(let i = 0; i<this.fermone.length;i=i+10){
+				//	circle(this.fermone[i].x,this.fermone[i].y,10)
+				//}
+				this.dir = atan2(this.y-this.fermone[this.returnord].y,this.x-this.fermone[this.returnord].x)+3
+				circle(this.fermone[this.returnord].x,this.fermone[this.returnord].y,20)
+				console.log(this.dir)
 				let change = random(-0.5,0.5)
 				this.dir += change
 				this.x += this.speed*cos(this.dir)
 				this.y += this.speed*sin(this.dir)
 				
 				if(this.fermonedis < dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y)){
-					console.log(this.fermonedis)
-					console.log(dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y))
+					//console.log(this.fermonedis)
+					//console.log(dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y))
 					//console.log(change)
 					this.x -= this.speed*cos(this.dir)
 					this.y -= this.speed*sin(this.dir)
@@ -114,7 +117,7 @@ class createAnt{
 						this.returnord = 1
 					}
 				}
-				if(30 > dist(100,100,this.x,this.y)){
+				if(10 > dist(100,100,this.x,this.y)){
 					this.actionpar = "getting more"
 				}
 			} else if (this.actionpar == "getting more"){
@@ -126,6 +129,7 @@ class createAnt{
 			
 		}
 		this.dis = dist(100,100,this.x,this.y)
+		this.fermonedis = dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y)
 	}
 	show(){
 		if(this.action == "getting food"){
