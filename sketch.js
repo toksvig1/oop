@@ -1,5 +1,8 @@
 let a = []
 let foodarr = []
+let followtrail = []
+
+
 function setup() 
 {
 	createCanvas(1000, 700);
@@ -80,14 +83,21 @@ class createAnt{
 			for(let i = 0; i<foodarr.length;i++){
 				if(dist(foodarr[i].x,foodarr[i].y,this.x,this.y) < (this.size/2)+(foodarr[i].size/2)){
 					this.action = "getting food"
+					for(let i = 0; i<a.length;i++){
+						a[i].action = "getting food"
+						a[i].actionpar = "returning"
+						a[i].fermone = this.fermone
+					}
 					this.actionpar = "returning"
-					console.log("w")
+					//console.log("w")
 				}
 			}
 
 		}
 		if(this.action == "getting food"){
+			//console.log("s")
 			if(this.actionpar == "returning"){
+				//console.log("A")
 				if (this.returnord == 0){
 					this.returnord = this.fermone.length-1
 					console.log(this.fermone.length)
@@ -96,8 +106,8 @@ class createAnt{
 				//	circle(this.fermone[i].x,this.fermone[i].y,10)
 				//}
 				this.dir = atan2(this.y-this.fermone[this.returnord].y,this.x-this.fermone[this.returnord].x)+3
-				circle(this.fermone[this.returnord].x,this.fermone[this.returnord].y,20)
-				console.log(this.dir)
+				//circle(this.fermone[this.returnord].x,this.fermone[this.returnord].y,20)
+				//console.log(this.dir)
 				let change = random(-0.5,0.5)
 				this.dir += change
 				this.x += this.speed*cos(this.dir)
@@ -119,9 +129,36 @@ class createAnt{
 				}
 				if(10 > dist(100,100,this.x,this.y)){
 					this.actionpar = "getting more"
+					this.returnord = 10
 				}
 			} else if (this.actionpar == "getting more"){
+				
+				this.dir = atan2(this.y-this.fermone[this.returnord].y,this.x-this.fermone[this.returnord].x)+3
+				let change = random(-0.5,0.5)
+				this.dir += change
+				this.x += this.speed*cos(this.dir)
+				this.y += this.speed*sin(this.dir)
+				if(this.fermonedis < dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y)){
+					//console.log(this.fermonedis)
+					//console.log(dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y))
+					//console.log(change)
+					this.x -= this.speed*cos(this.dir)
+					this.y -= this.speed*sin(this.dir)
+					//this.dir -= change
+				} else if (dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y) < 20){
+					if (this.returnord < this.fermone.length-10){
+						this.returnord += 10
+					} else{
+						this.returnord = this.fermone.length-1
+						console.log("EG")
+					}
 
+					
+					if(dist(foodarr[0].x,foodarr[0].y,this.x,this.y) < 25){
+						this.actionpar = "returning"
+						console.log("r")
+					}
+				}
 			}
 			
 
@@ -133,7 +170,7 @@ class createAnt{
 	}
 	show(){
 		if(this.action == "getting food"){
-			fill('brown')
+			//fill('brown')
 		}else {
 			fill('white')
 		}
