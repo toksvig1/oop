@@ -6,8 +6,8 @@ let followtrail = []
 function setup() 
 {
 	createCanvas(1000, 700);
-
-
+	console.log("n2e2w2")
+	followtrail = [new xogy(105,105),new xogy(105,105)]
 	for(let i = 0;i<100;i++){
 		a.push(new createAnt(100,100,10,random(0,360),1,"searching","leaving"))
 	}
@@ -25,9 +25,15 @@ function draw()
 	for(let i = 0; i<a.length;i++){
 		a[i].move()
 		a[i].show()
+		//console.log(a[i].action)
 	}
 	for(let i = 0; i<foodarr.length;i++){
 		foodarr[i].display()
+	}
+	if(foodarr[0].size <2){
+		foodarr = []
+		foodarr.push(new food(random(300,800),random(300,650),30))
+		followtrail = [new xogy(105,105),new xogy(105,105)]
 	}
 }
 
@@ -42,14 +48,17 @@ class createAnt{
 		this.dis = dist(100,100,this.x,this.y)
 		this.action = action
 		this.actionpar = actionpar
-		this.fermone = [new xogy(100,100),new xogy(100,100)]
+		this.fermone = [new xogy(105,105),new xogy(105,105)]
 		this.returnord = 0
 		this.fermonedis = dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y)
 		this.randomwalk = random(400,2000)
+		this.oldx = 500
 	}
 	move(){
+		
 		//console.log(this.action)
 		if(this.action == "searching"){
+			
 			//console.log("sss")
 			let change = random(-0.5,0.5)
 			this.dir += change
@@ -100,12 +109,14 @@ class createAnt{
 
 		}
 		if(this.action == "getting food"){
+			
+		//	console.log("s")
 			//console.log("s")
 			if(this.actionpar == "returning"){
 				//console.log("A")
 				if (this.returnord == 0){
 					this.returnord = this.fermone.length-1
-					console.log(this.fermone.length)
+					//console.log(this.fermone.length)
 				}
 				//for(let i = 0; i<this.fermone.length;i=i+10){
 				//	circle(this.fermone[i].x,this.fermone[i].y,10)
@@ -133,7 +144,16 @@ class createAnt{
 					}
 				}
 				if(10 > dist(100,100,this.x,this.y)){
-					this.actionpar = "getting more"
+					
+					if (followtrail.length == 2){
+						this.action = "searching"
+						this.actionpar = "leaving"
+						this.fermone = followtrail
+					} else {
+						this.actionpar = "getting more"
+						this.fermone = followtrail
+					}
+					
 					this.returnord = 10
 				}
 				
@@ -156,15 +176,23 @@ class createAnt{
 						this.returnord += 10
 					} else{
 						this.returnord = this.fermone.length-1
-						console.log("EG")
+						//console.log("EG")
 					}
 
 					
 					if(dist(foodarr[0].x,foodarr[0].y,this.x,this.y) < 25){
+						//console.log(this.returnord)
+						//console.log(this.fermone.length)
 						this.actionpar = "returning"
 						foodarr[0].size -= 1
-						console.log("r")
+						//console.log("r")
 					}
+					if(this.oldx != foodarr[0].x && this.returnord == this.fermone.length-1){
+						console.log("oldx")
+						this.actionpar = "returning"
+						this.oldx = foodarr[0].x
+					}
+
 				}
 			}
 			
@@ -173,9 +201,10 @@ class createAnt{
 			
 		}
 		if(this.action == "justreturning"){
+			//console.log("a")
 			if (this.returnord == 0){
 				this.returnord = this.fermone.length-1
-				console.log(this.fermone.length)
+				//console.log(this.fermone.length)
 			}
 			//for(let i = 0; i<this.fermone.length;i=i+10){
 			//	circle(this.fermone[i].x,this.fermone[i].y,10)
@@ -203,9 +232,14 @@ class createAnt{
 				}
 			}
 			if(10 > dist(100,100,this.x,this.y)){
-				if(followtrail == []){
+				
+				if(followtrail.length == 2){
+					//console.log("b")
 					this.action = "searching"
+					this.actionpar = "leaving"
+					this.fermone = followtrail
 				} else {
+					//console.log("v")
 					this.action = "getting food"
 					this.actionpar = "getting more"
 					this.returnord = 10
@@ -216,7 +250,14 @@ class createAnt{
 			}
 		}
 		this.dis = dist(100,100,this.x,this.y)
+		//console.log(this.fermone.length)
+		//console.log(this.returnord)
+		console.log(this.action)
+		if(this.action != "searching"){
+
+		
 		this.fermonedis = dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y)
+	}
 	}
 	show(){
 		if(this.action == "getting food"){
