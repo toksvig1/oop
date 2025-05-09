@@ -45,6 +45,7 @@ class createAnt{
 		this.fermone = [new xogy(100,100),new xogy(100,100)]
 		this.returnord = 0
 		this.fermonedis = dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y)
+		this.randomwalk = random(400,2000)
 	}
 	move(){
 		//console.log(this.action)
@@ -79,17 +80,21 @@ class createAnt{
 
 			this.x += this.speed*cos(this.dir)
 			this.y += this.speed*sin(this.dir)
-			
+			if(this.fermone.length > this.randomwalk){
+				this.action = "justreturning"
+			}
 			for(let i = 0; i<foodarr.length;i++){
 				if(dist(foodarr[i].x,foodarr[i].y,this.x,this.y) < (this.size/2)+(foodarr[i].size/2)){
 					this.action = "getting food"
-					for(let i = 0; i<a.length;i++){
-						a[i].action = "getting food"
-						a[i].actionpar = "returning"
-						a[i].fermone = this.fermone
-					}
+					//for(let i = 0; i<a.length;i++){
+					//	a[i].action = "getting food"
+					//	a[i].actionpar = "returning"
+					//	a[i].fermone = this.fermone
+					//}
+					followtrail = this.fermone
 					this.actionpar = "returning"
 					//console.log("w")
+					foodarr[i].size -= 1
 				}
 			}
 
@@ -131,6 +136,7 @@ class createAnt{
 					this.actionpar = "getting more"
 					this.returnord = 10
 				}
+				
 			} else if (this.actionpar == "getting more"){
 				
 				this.dir = atan2(this.y-this.fermone[this.returnord].y,this.x-this.fermone[this.returnord].x)+3
@@ -156,6 +162,7 @@ class createAnt{
 					
 					if(dist(foodarr[0].x,foodarr[0].y,this.x,this.y) < 25){
 						this.actionpar = "returning"
+						foodarr[0].size -= 1
 						console.log("r")
 					}
 				}
@@ -164,6 +171,49 @@ class createAnt{
 
 
 			
+		}
+		if(this.action == "justreturning"){
+			if (this.returnord == 0){
+				this.returnord = this.fermone.length-1
+				console.log(this.fermone.length)
+			}
+			//for(let i = 0; i<this.fermone.length;i=i+10){
+			//	circle(this.fermone[i].x,this.fermone[i].y,10)
+			//}
+			this.dir = atan2(this.y-this.fermone[this.returnord].y,this.x-this.fermone[this.returnord].x)+3
+			//circle(this.fermone[this.returnord].x,this.fermone[this.returnord].y,20)
+			//console.log(this.dir)
+			let change = random(-0.5,0.5)
+			this.dir += change
+			this.x += this.speed*cos(this.dir)
+			this.y += this.speed*sin(this.dir)
+			
+			if(this.fermonedis < dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y)){
+				//console.log(this.fermonedis)
+				//console.log(dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y))
+				//console.log(change)
+				this.x -= this.speed*cos(this.dir)
+				this.y -= this.speed*sin(this.dir)
+				//this.dir -= change
+			} else if (dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y) < 20){
+				if (this.returnord > 10){
+					this.returnord -= 10
+				} else{
+					this.returnord = 1
+				}
+			}
+			if(10 > dist(100,100,this.x,this.y)){
+				if(followtrail == []){
+					this.action = "searching"
+				} else {
+					this.action = "getting food"
+					this.actionpar = "getting more"
+					this.returnord = 10
+					this.fermone = followtrail
+				}
+
+				
+			}
 		}
 		this.dis = dist(100,100,this.x,this.y)
 		this.fermonedis = dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y)
