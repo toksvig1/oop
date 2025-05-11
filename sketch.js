@@ -102,6 +102,7 @@ class createAnt{
 					//}
 					followtrail = this.fermone
 					this.actionpar = "returning"
+					console.log("a")
 					//console.log("w")
 					foodarr[i].size -= 1
 				}
@@ -109,33 +110,19 @@ class createAnt{
 
 		}
 		if(this.action == "getting food"){
-			
-		//	console.log("s")
-			//console.log("s")
 			if(this.actionpar == "returning"){
-				//console.log("A")
 				if (this.returnord == 0){
 					this.returnord = this.fermone.length-1
-					//console.log(this.fermone.length)
 				}
-				//for(let i = 0; i<this.fermone.length;i=i+10){
-				//	circle(this.fermone[i].x,this.fermone[i].y,10)
-				//}
 				this.dir = atan2(this.y-this.fermone[this.returnord].y,this.x-this.fermone[this.returnord].x)+3
-				//circle(this.fermone[this.returnord].x,this.fermone[this.returnord].y,20)
-				//console.log(this.dir)
 				let change = random(-0.5,0.5)
 				this.dir += change
 				this.x += this.speed*cos(this.dir)
 				this.y += this.speed*sin(this.dir)
 				
 				if(this.fermonedis < dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y)){
-					//console.log(this.fermonedis)
-					//console.log(dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y))
-					//console.log(change)
 					this.x -= this.speed*cos(this.dir)
 					this.y -= this.speed*sin(this.dir)
-					//this.dir -= change
 				} else if (dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y) < 20){
 					if (this.returnord > 10){
 						this.returnord -= 10
@@ -165,27 +152,19 @@ class createAnt{
 				this.x += this.speed*cos(this.dir)
 				this.y += this.speed*sin(this.dir)
 				if(this.fermonedis < dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y)){
-					//console.log(this.fermonedis)
-					//console.log(dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y))
-					//console.log(change)
 					this.x -= this.speed*cos(this.dir)
 					this.y -= this.speed*sin(this.dir)
-					//this.dir -= change
 				} else if (dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y) < 20){
 					if (this.returnord < this.fermone.length-10){
 						this.returnord += 10
 					} else{
 						this.returnord = this.fermone.length-1
-						//console.log("EG")
 					}
 
 					
 					if(dist(foodarr[0].x,foodarr[0].y,this.x,this.y) < 25){
-						//console.log(this.returnord)
-						//console.log(this.fermone.length)
 						this.actionpar = "returning"
 						foodarr[0].size -= 1
-						//console.log("r")
 					}
 					if(this.oldx != foodarr[0].x && this.returnord == this.fermone.length-1){
 						console.log("oldx")
@@ -252,10 +231,11 @@ class createAnt{
 		this.dis = dist(100,100,this.x,this.y)
 		//console.log(this.fermone.length)
 		//console.log(this.returnord)
-		console.log(this.action)
+		//console.log(this.action)
 		if(this.action != "searching"){
 
-		
+		//console.log(this.returnord)
+		//console.log(this.fermone.length)
 		this.fermonedis = dist(this.fermone[this.returnord].x,this.fermone[this.returnord].y,this.x,this.y)
 	}
 	}
